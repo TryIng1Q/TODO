@@ -1,0 +1,152 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    color: #FFF;
+}
+@font-face {
+    font-family: 'Ubuntu-Light';
+    src: url('fonts/Ubuntu-Light.woff2');
+}
+@font-face {
+    font-family: 'Ubuntu-Regular';
+    src: url('fonts/Ubuntu-Regular.woff2');
+}
+@font-face {
+    font-family: 'Ubuntu-Medium';
+    src: url('fonts/Ubuntu-Medium.woff2');
+}
+
+/* Style */
+.body {
+    background-color: #f2f2f2;
+}
+.header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+    height: 50px;
+
+    background-color: #603F8B;
+    box-shadow: 0px 1px 15px #202020;
+}
+.owner {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 600px;
+    height: 100%;
+}
+.owner__wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    width: 175px;
+    height: 100%;
+    transform: skew(-30deg);
+    transition: border .1s linear, background-color .3s linear;
+}
+.owner__type {
+    font-family: 'Ubuntu-Medium';
+    font-size: 22px;
+    color: #FFF;
+    text-shadow: 1px 1px #818285;
+    transform: skew(25deg);
+    transition: text-shadow .3s linear;
+}
+.storage {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    width: 150px;
+    height: 40px;
+    
+    /* border: 2px solid #023047; */
+
+    font-family: 'Ubuntu-Medium';
+    font-size: 18px;
+    color: #FFF;
+}
+.storage__wrapper {
+    position: absolute;
+    top: 0;
+
+    width: 100%;
+    height: 200%;
+    background-color: #d62828;
+    transition: top .5s ease-in-out;
+}
+.storage__type {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+}
+.storage__type:nth-child(1) {
+    background-color: #2a9d8f;
+}
+.storage__type:nth-child(2) {
+    background-color: #0E050F;
+}
+
+
+/* .storage::before {
+    padding: 0 5px;
+    content: 'StorageType';
+    position: absolute;
+
+    top: 1px;
+    left: 15px;
+
+    color: #14213d;
+    font-size: 15px;
+    background-color: #fca311;
+}
+.storage::after {
+    content: 'Server';
+    position: absolute;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+
+    top: 65px;
+    right: 50%;
+
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+
+    background-color: #003049;
+    transition: top .5s ease-in-out;
+} */
+
+
+
+.owner__wrapper:hover {
+    background-color: #2a9d8f;
+    border-left: 3px solid #FFF;
+    border-right: 3px solid #FFF;
+}
+.owner__wrapper:hover > .owner__type {
+    text-shadow: 3px 3px #818285;
+}
+.storage:hover .storage__wrapper {
+    top: -100%;
+}
