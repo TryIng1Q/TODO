@@ -1,16 +1,17 @@
 // Объект содержащий все функции отвечающие за отрисовку DOM дерева
 
 const VISUAL_FUNCTIONS = {
-	todoTypeChanger(element) {
-		ownersBtn.forEach(owner => {
-			owner.addEventListener('click', (event) => {
-				event.preventDefault();
-				
-				VISUAL_FUNCTIONS.todoTypeChanger(owner);
-			});
+	todoTypeChanger(elements) {
+		elements.forEach(owner => {
+			console.log(owner);
 		});
-		console.log(element.getAttribute('ownerType'));
 	},
 };
 
 export default VISUAL_FUNCTIONS;
+
+// owner.addEventListener('click', (event) => {
+// 	event.preventDefault();
+
+// 	console.log(owner.getAttribute('ownerType'));
+// });
