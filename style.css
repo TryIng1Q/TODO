@@ -36,6 +36,18 @@
     background-color: #603F8B;
     box-shadow: 0px 1px 15px #202020;
 }
+.main {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 50px;
+    width: 100vw;
+    height: calc(100vh - 50px);
+}
+
+/* Header Style */
 .owner {
     display: flex;
     flex-flow: row nowrap;
@@ -105,40 +117,11 @@
     background-color: #0E050F;
 }
 
-
-/* .storage::before {
-    padding: 0 5px;
-    content: 'StorageType';
-    position: absolute;
-
-    top: 1px;
-    left: 15px;
-
-    color: #14213d;
-    font-size: 15px;
-    background-color: #fca311;
+.owner-active {
+    background-color: #2a9d8f;
+    border-left: 3px solid #FFF;
+    border-right: 3px solid #FFF;
 }
-.storage::after {
-    content: 'Server';
-    position: absolute;
-
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-
-    top: 65px;
-    right: 50%;
-
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
-
-    background-color: #003049;
-    transition: top .5s ease-in-out;
-} */
-
-
-
 .owner__wrapper:hover {
     background-color: #2a9d8f;
     border-left: 3px solid #FFF;
@@ -149,4 +132,96 @@
 }
 .storage:hover .storage__wrapper {
     top: -100%;
+}
+
+/* Form */
+.from-todo {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 800px;
+    height: 40px;
+    margin-bottom: 50px;
+
+    border: 2px solid #FFF;
+}
+.error-input {
+    border-bottom: 1px solid #d62828;
+}
+.error-input::placeholder {
+    color: #d62828;
+}
+.from-todo__input {
+    padding: 0 15px;
+
+    width: 80%;
+    height: 36px;
+
+    color: #0E050F;
+    font-family: 'Ubuntu-Light';
+    font-size: 20px;
+}
+.from-todo__del-btn {
+    width: 10%;
+    height: 36px;
+
+    font-size: 16px;
+    font-family: 'Ubuntu-Regular';
+    text-shadow: 1px 1px #818285;
+    background-color: #9c5757;
+    border-left: 1px solid #FFF;
+}
+.from-todo__add-btn {
+    width: 10%;
+    height: 36px;
+
+    font-size: 16px;
+    font-family: 'Ubuntu-Regular';
+    text-shadow: 1px 1px #818285;
+    background-color: #63afa9;
+    border-left: 1px solid #FFF;
+}
+
+/* ToDo */
+.todo {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 1200px;
+    height: 40px;
+    margin-bottom: 50px;
+
+    background-color: #fff;
+}
+.todo__deskr {
+    padding: 0 15px;
+    width: 84%;
+
+    color: #0E050F;
+    font-family: 'Ubuntu-Light';
+    font-size: 20px;
+}
+.todo__done-btn {
+    width: 8%;
+    height: 36px;
+
+    font-size: 16px;
+    font-family: 'Ubuntu-Regular';
+    text-shadow: 1px 1px #818285;
+    background-color: #63afa9;
+    border-left: 1px solid #FFF;
+}
+.todo__del-btn {
+    width: 8%;
+    height: 36px;
+
+    font-size: 16px;
+    font-family: 'Ubuntu-Regular';
+    text-shadow: 1px 1px #818285;
+    background-color: #9c5757;
+    border-left: 1px solid #FFF;
 }
