@@ -15,9 +15,10 @@ const SERVER_FUNCTIONS = {
 		localStorage.setItem(`${ownerType}List`, '[]');
 	},
 	appendNewTodo(todoDeskr) {
+		if (todoDeskr.length === 0) return false;
+
 		const currentOwner = localStorage.getItem('currentOwner');
 		const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
-		console.log(ownerTodoList);
 
 		ownerTodoList.push({
 			text: todoDeskr,
@@ -25,7 +26,8 @@ const SERVER_FUNCTIONS = {
 		});
 
 		localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
+
+		return true;
 	},
 };
-
 export default SERVER_FUNCTIONS;

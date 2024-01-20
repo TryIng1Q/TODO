@@ -1,4 +1,6 @@
 const VISUAL_FUNCTIONS = {
+	currentId: 0,
+
 	todoOwnerChanger(activeButton, changeOwnersButtons) {
 		changeOwnersButtons.forEach(ownerButton => {
 			ownerButton.classList.remove('owner-active');
@@ -11,16 +13,7 @@ const VISUAL_FUNCTIONS = {
 	
 		activeOwnerButton.classList.add('owner-active');
 	},
-	drawTodo(todoDeskr, {input ,todoStatus = false}) {
-		// Validation
-		if (todoDeskr.length === 0) {
-			input.classList.add('error-input');
-			input.placeholder = 'Вы забыли про задание :(';
-		} else {
-			input.classList.remove('error-input');
-			input.value = '';
-		}
-
+	drawTodo(todoDeskr, todoStatus) {
 		const todoContainer = document.querySelector('.main');
 	
 		const todoWrapper = document.createElement('section');
@@ -28,7 +21,18 @@ const VISUAL_FUNCTIONS = {
 		const todoDoneButton = document.createElement('button');
 		const todoDelButton = document.createElement('button');
 
+		// Add buttons events
+		todoDoneButton.addEventListener('click', function() {
+			const elementID = this.parentElement.getAttribute('list_id');
+			console.log(elementID);
+		});
+		todoDelButton.addEventListener('click', function() {
+			const elementID = this.parentElement.getAttribute('list_id');	
+			console.log(elementID);
+		});
+
 		todoWrapper.classList.add('todo');
+		todoWrapper.setAttribute('list_id', this.currentId++)
 
 		todoDeskrWrapper.classList.add('todo__deskr');
 		todoDeskrWrapper.textContent = todoDeskr;
@@ -45,6 +49,14 @@ const VISUAL_FUNCTIONS = {
 		todoWrapper.append(todoDelButton);
 		todoContainer.append(todoWrapper);
 	},
+	drawOwnerTodoList() {
+		const currentOwner = localStorage.getItem('currentOwner');
+		const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+
+		for (let i = 0; i <= ownerTodoList.length - 1; i++) {
+			this.drawTodo(ownerTodoList[i].text, ownerTodoList[i].status);
+		}
+	}
 };
 
 export default VISUAL_FUNCTIONS;
