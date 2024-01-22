@@ -14,7 +14,7 @@ const VISUAL_FUNCTIONS = {
 		activeOwnerButton.classList.add('owner-active');
 	},
 	drawTodo(todoDeskr, todoStatus) {
-		const todoContainer = document.querySelector('.main');
+		const todoContainer = document.querySelector('.todo_container');
 	
 		const todoWrapper = document.createElement('section');
 		const todoDeskrWrapper = document.createElement('p');
@@ -32,6 +32,7 @@ const VISUAL_FUNCTIONS = {
 				ownerList[elementID].status = true;
 			};
 
+			todoWrapper.classList.toggle('todo-status-done');
 			VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 		});
 		todoDelButton.addEventListener('click', function() {
@@ -48,6 +49,11 @@ const VISUAL_FUNCTIONS = {
 
 			VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 		});
+
+		// Status style
+		if (todoStatus) {
+			todoWrapper.classList.add('todo-status-done');
+		};
 
 		todoWrapper.classList.add('todo');
 		todoWrapper.setAttribute('list_id', this.currentId++)

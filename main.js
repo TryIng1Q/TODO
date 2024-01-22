@@ -2,7 +2,8 @@ import VISUAL_FUNCTIONS from "./visual.js";
 import SERVER_FUNCTIONS from "./server.js";
 
 // Memory owner
-SERVER_FUNCTIONS.todoOwnerValidation();
+SERVER_FUNCTIONS.storageInit();
+SERVER_FUNCTIONS.todoOwnerInit();
 VISUAL_FUNCTIONS.todoOwnerMemory();
 
 // Init owners button
@@ -10,12 +11,26 @@ const changeOwnerButtons = document.querySelectorAll('.owner > .owner__wrapper')
 changeOwnerButtons.forEach(ownerButton => {
 	SERVER_FUNCTIONS.createOwnerObject(ownerButton.getAttribute('ownerType'));
 
+	const todoContainer = document.querySelector('.todo_container');
 	ownerButton.addEventListener('click', function(event) {
 		event.preventDefault();
 
+		todoContainer.innerHTML = '';
+
+		VISUAL_FUNCTIONS.currentId = 0;
 		VISUAL_FUNCTIONS.todoOwnerChanger(this, changeOwnerButtons);
 		SERVER_FUNCTIONS.changeTodoList(this);
+		VISUAL_FUNCTIONS.drawOwnerTodoList();
 	});
+});
+
+// Init storage button
+const changeStorageButton = document.querySelector('.storage');
+const changeStorageWrapper = document.querySelector('.storage__wrapper');
+changeStorageButton.addEventListener('click', () => {
+	changeStorageWrapper.classList.toggle('active--storage');
+
+	SERVER_FUNCTIONS.storageChange();
 });
 
 // Draw owner todo list

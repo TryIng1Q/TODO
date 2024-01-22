@@ -2,7 +2,7 @@ const SERVER_FUNCTIONS = {
 	changeTodoList(currentTodoOwner) {
 		localStorage.setItem('currentOwner', currentTodoOwner.getAttribute('ownerType'));
 	},
-	todoOwnerValidation() {
+	todoOwnerInit() {
 		if (localStorage.getItem('currentOwner')) {
 			return;
 		}
@@ -28,6 +28,31 @@ const SERVER_FUNCTIONS = {
 		localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
 
 		return true;
+	},
+	storageInit() {
+		const storageType = localStorage.getItem('storageType');
+		const changeStorageWrapper = document.querySelector('.storage__wrapper');
+		console.log(storageType);
+
+
+		if (storageType === 'server') {
+			changeStorageWrapper.classList.add('active--storage');
+		};
+
+		if (storageType) {
+			return storageType;
+		};
+
+		localStorage.setItem('storageType', 'localStorage');
+	},
+	storageChange() {
+		const storageType = localStorage.getItem('storageType');
+
+		if (storageType === 'localStorage') {
+			localStorage.setItem('storageType', 'server');
+		} else if (storageType === 'server') {
+			localStorage.setItem('storageType', 'localStorage');
+		};
 	},
 };
 export default SERVER_FUNCTIONS;

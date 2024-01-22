@@ -130,7 +130,7 @@
 .owner__wrapper:hover > .owner__type {
     text-shadow: 3px 3px #818285;
 }
-.storage:hover .storage__wrapper {
+.active--storage {
     top: -100%;
 }
 
@@ -205,6 +205,12 @@
     font-family: 'Ubuntu-Light';
     font-size: 20px;
 }
+.todo__deskr::first-letter {
+    color: #7d1111;
+    font-family: 'Ubuntu-Medium';
+    font-size: 22px;
+    text-transform: uppercase;
+}
 .todo__done-btn {
     width: 8%;
     height: 36px;
@@ -224,4 +230,8 @@
     text-shadow: 1px 1px #818285;
     background-color: #9c5757;
     border-left: 1px solid #FFF;
+}
+
+.todo-status-done {
+    background-color: #92c78377;
 }
