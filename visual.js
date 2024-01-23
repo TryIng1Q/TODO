@@ -13,7 +13,7 @@ const VISUAL_FUNCTIONS = {
 	
 		activeOwnerButton.classList.add('owner-active');
 	},
-	drawTodo(todoDeskr, todoStatus) {
+	drawTodo(todoDeskr, todoStatus, id = '') {
 		const todoContainer = document.querySelector('.todo_container');
 	
 		const todoWrapper = document.createElement('section');
@@ -22,32 +22,58 @@ const VISUAL_FUNCTIONS = {
 		const todoDelButton = document.createElement('button');
 
 		// Add buttons events
-		todoDoneButton.addEventListener('click', function() {
-			const elementID = this.parentElement.getAttribute('list_id');
-			const ownerList = VISUAL_FUNCTIONS.getStorageList('get');
+		todoDoneButton.addEventListener('click', async function() {
+			const storageType = localStorage.getItem('storageType');
 
-			if (ownerList[elementID].status) {
-				ownerList[elementID].status = false;
-			} else {
-				ownerList[elementID].status = true;
-			};
+			if (storageType === 'localStorage') {
+				const elementID = this.parentElement.getAttribute('list_id');
+				const ownerList = VISUAL_FUNCTIONS.getStorageList('get');
+
+				if (ownerList[elementID].status) {
+					ownerList[elementID].status = false;
+				} else {
+					ownerList[elementID].status = true;
+				};
+
+				VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
+			} else if (storageType === 'server') {
+				const currentTodo = await (await fetch(`http://localhost:3000/api/todos/${id}`)).json(); 
+
+				if (currentTodo.done) {
+					currentTodo.done = false;
+				} else {
+					currentTodo.done = true;
+				};
+
+				fetch(`http://localhost:3000/api/todos/${id}`, {
+					method: 'PATCH',
+					body: JSON.stringify(currentTodo),
+				});
+			}
 
 			todoWrapper.classList.toggle('todo-status-done');
-			VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 		});
 		todoDelButton.addEventListener('click', function() {
-			const elementID = this.parentElement.getAttribute('list_id');
-			const ownerList = VISUAL_FUNCTIONS.getStorageList('get');
+			const storageType = localStorage.getItem('storageType');
 
-			for (let i = Number(elementID) + 1; i < ownerList.length; i++) {
-				const oldElement= document.querySelector(`.todo[list_id="${i}"]`)
-				oldElement.setAttribute('list_id', i - 1);
+			if (storageType === "localStorage") {
+				const elementID = this.parentElement.getAttribute('list_id');
+				const ownerList = VISUAL_FUNCTIONS.getStorageList('get');
+	
+				for (let i = Number(elementID) + 1; i < ownerList.length; i++) {
+					const oldElement= document.querySelector(`.todo[list_id="${i}"]`)
+					oldElement.setAttribute('list_id', i - 1);
+				};
+	
+				ownerList.splice(elementID, 1);
+	
+				VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
+			} else if (storageType === "server") {
+				fetch(`http://localhost:3000/api/todos/${id}`, {
+					method: 'DELETE',
+				});
 			};
-
-			ownerList.splice(elementID, 1);
 			todoWrapper.remove();
-
-			VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 		});
 
 		// Status style
@@ -73,13 +99,23 @@ const VISUAL_FUNCTIONS = {
 		todoWrapper.append(todoDelButton);
 		todoContainer.append(todoWrapper);
 	},
-	drawOwnerTodoList() {
+	async drawOwnerTodoList() {
 		const currentOwner = localStorage.getItem('currentOwner');
-		const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+		const storageType = localStorage.getItem('storageType');
 
-		for (let i = 0; i <= ownerTodoList.length - 1; i++) {
-			this.drawTodo(ownerTodoList[i].text, ownerTodoList[i].status);
-		}
+		if (storageType === 'localStorage') {
+			const ownerStorageTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+
+			for (let i = 0; i <= ownerStorageTodoList.length - 1; i++) {
+				this.drawTodo(ownerStorageTodoList[i].text, ownerStorageTodoList[i].status);
+			}; 
+		} else if (storageType === 'server') {
+			const ownerServerTodoList = await (await(fetch(`http://localhost:3000/api/todos?owner=${currentOwner}`))).json();
+
+			for (let i = 0; i <= ownerServerTodoList.length - 1; i++) {
+				this.drawTodo(ownerServerTodoList[i].name, ownerServerTodoList[i].done, ownerServerTodoList[i].id);
+			}; 
+		};
 	},
 	getStorageList(type = 'get', changeOwnerList = []) {
 		const ownerType = localStorage.getItem('currentOwner');

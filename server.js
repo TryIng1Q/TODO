@@ -18,22 +18,33 @@ const SERVER_FUNCTIONS = {
 		if (todoDeskr.length === 0) return false;
 
 		const currentOwner = localStorage.getItem('currentOwner');
-		const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+		const storageType = localStorage.getItem('storageType');
 
-		ownerTodoList.push({
-			text: todoDeskr,
-			status: false,
-		});
-
-		localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
+		if (storageType === 'localStorage') {
+			const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+	
+			ownerTodoList.push({
+				text: todoDeskr,
+				status: false,
+			});
+	
+			localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
+		} else if (storageType === 'server') {
+			fetch('http://localhost:3000/api/todos', {
+				method: 'POST',
+				body: JSON.stringify({
+					name: todoDeskr, 
+					owner: currentOwner,
+					done: false,
+				}),
+			});
+		};
 
 		return true;
 	},
 	storageInit() {
 		const storageType = localStorage.getItem('storageType');
 		const changeStorageWrapper = document.querySelector('.storage__wrapper');
-		console.log(storageType);
-
 
 		if (storageType === 'server') {
 			changeStorageWrapper.classList.add('active--storage');
