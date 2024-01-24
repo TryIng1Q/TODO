@@ -13,7 +13,7 @@ const VISUAL_FUNCTIONS = {
 	
 		activeOwnerButton.classList.add('owner-active');
 	},
-	drawTodo(todoDeskr, todoStatus, id = '') {
+	drawTodo(todo) {
 		const todoContainer = document.querySelector('.todo_container');
 	
 		const todoWrapper = document.createElement('section');
@@ -23,6 +23,7 @@ const VISUAL_FUNCTIONS = {
 
 		// Add buttons events
 		todoDoneButton.addEventListener('click', async function() {
+			console.log(todo.id);
 			const storageType = localStorage.getItem('storageType');
 
 			if (storageType === 'localStorage') {
@@ -37,7 +38,7 @@ const VISUAL_FUNCTIONS = {
 
 				VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 			} else if (storageType === 'server') {
-				const currentTodo = await (await fetch(`http://localhost:3000/api/todos/${id}`)).json(); 
+				const currentTodo = await (await fetch(`http://localhost:3000/api/todos/${todo.id}`)).json(); 
 
 				if (currentTodo.done) {
 					currentTodo.done = false;
@@ -45,7 +46,7 @@ const VISUAL_FUNCTIONS = {
 					currentTodo.done = true;
 				};
 
-				fetch(`http://localhost:3000/api/todos/${id}`, {
+				fetch(`http://localhost:3000/api/todos/${todo.id}`, {
 					method: 'PATCH',
 					body: JSON.stringify(currentTodo),
 				});
@@ -69,7 +70,7 @@ const VISUAL_FUNCTIONS = {
 	
 				VISUAL_FUNCTIONS.getStorageList('set', JSON.stringify(ownerList));
 			} else if (storageType === "server") {
-				fetch(`http://localhost:3000/api/todos/${id}`, {
+				fetch(`http://localhost:3000/api/todos/${todo.id}`, {
 					method: 'DELETE',
 				});
 			};
@@ -77,7 +78,7 @@ const VISUAL_FUNCTIONS = {
 		});
 
 		// Status style
-		if (todoStatus) {
+		if (todo.status) {
 			todoWrapper.classList.add('todo-status-done');
 		};
 
@@ -85,7 +86,7 @@ const VISUAL_FUNCTIONS = {
 		todoWrapper.setAttribute('list_id', this.currentId++)
 
 		todoDeskrWrapper.classList.add('todo__deskr');
-		todoDeskrWrapper.textContent = todoDeskr;
+		todoDeskrWrapper.textContent = todo.name;
 
 		todoDoneButton.classList.add('todo__done-btn');
 		todoDoneButton.textContent = 'Done';
@@ -107,13 +108,20 @@ const VISUAL_FUNCTIONS = {
 			const ownerStorageTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
 
 			for (let i = 0; i <= ownerStorageTodoList.length - 1; i++) {
-				this.drawTodo(ownerStorageTodoList[i].text, ownerStorageTodoList[i].status);
+				this.drawTodo({
+					name: ownerStorageTodoList[i].name,
+					status: ownerStorageTodoList[i].status
+				});
 			}; 
 		} else if (storageType === 'server') {
 			const ownerServerTodoList = await (await(fetch(`http://localhost:3000/api/todos?owner=${currentOwner}`))).json();
 
 			for (let i = 0; i <= ownerServerTodoList.length - 1; i++) {
-				this.drawTodo(ownerServerTodoList[i].name, ownerServerTodoList[i].done, ownerServerTodoList[i].id);
+				this.drawTodo({
+					name: ownerServerTodoList[i].name,
+					status: ownerServerTodoList[i].done,
+					id :ownerServerTodoList[i].id
+				});
 			}; 
 		};
 	},

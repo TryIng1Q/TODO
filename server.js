@@ -14,33 +14,38 @@ const SERVER_FUNCTIONS = {
 		}
 		localStorage.setItem(`${ownerType}List`, '[]');
 	},
-	appendNewTodo(todoDeskr) {
+	async appendNewTodoServer(todoDeskr) {
 		if (todoDeskr.length === 0) return false;
 
 		const currentOwner = localStorage.getItem('currentOwner');
-		const storageType = localStorage.getItem('storageType');
+		const todoID = await(fetch('http://localhost:3000/api/todos', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: todoDeskr, 
+				owner: currentOwner,
+				done: false,
+			}),
+		}));
 
-		if (storageType === 'localStorage') {
-			const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
+		return todoID;
+	},
+	appendNewTodoStorage(todoDeskr) {
+		if (todoDeskr.length === 0) return false;
+
+		const currentOwner = localStorage.getItem('currentOwner');
+		const ownerTodoList = JSON.parse(localStorage.getItem(`${currentOwner}List`));
 	
-			ownerTodoList.push({
-				text: todoDeskr,
-				status: false,
-			});
-	
-			localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
-		} else if (storageType === 'server') {
-			fetch('http://localhost:3000/api/todos', {
-				method: 'POST',
-				body: JSON.stringify({
-					name: todoDeskr, 
-					owner: currentOwner,
-					done: false,
-				}),
-			});
+		ownerTodoList.push({
+			name: todoDeskr,
+			status: false,
+		});
+
+		localStorage.setItem(`${currentOwner}List`, JSON.stringify(ownerTodoList));
+
+		return {
+			name: todoDeskr,
+			status: false,
 		};
-
-		return true;
 	},
 	storageInit() {
 		const storageType = localStorage.getItem('storageType');

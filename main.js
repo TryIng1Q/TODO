@@ -8,10 +8,11 @@ VISUAL_FUNCTIONS.todoOwnerMemory();
 
 // Init owners button
 const changeOwnerButtons = document.querySelectorAll('.owner > .owner__wrapper');
+const todoContainer = document.querySelector('.todo_container');
+
 changeOwnerButtons.forEach(ownerButton => {
 	SERVER_FUNCTIONS.createOwnerObject(ownerButton.getAttribute('ownerType'));
 
-	const todoContainer = document.querySelector('.todo_container');
 	ownerButton.addEventListener('click', function(event) {
 		event.preventDefault();
 
@@ -28,9 +29,12 @@ changeOwnerButtons.forEach(ownerButton => {
 const changeStorageButton = document.querySelector('.storage');
 const changeStorageWrapper = document.querySelector('.storage__wrapper');
 changeStorageButton.addEventListener('click', () => {
+	todoContainer.innerHTML = '';
+
 	changeStorageWrapper.classList.toggle('active--storage');
 
 	SERVER_FUNCTIONS.storageChange();
+	VISUAL_FUNCTIONS.drawOwnerTodoList();
 });
 
 // Draw owner todo list
@@ -46,14 +50,21 @@ formDelButton.addEventListener('click', (event) => {
 
 	formInput.value = '';
 });
-formAddButton.addEventListener('click', (event) => {
+formAddButton.addEventListener('click', async(event) => {
 	event.preventDefault();
 
-	const functionAnswer = SERVER_FUNCTIONS.appendNewTodo(formInput.value);
+	const storageType = localStorage.getItem('storageType');
+	let functionAnswer;
+
+	if (storageType === 'localStorage') {
+		functionAnswer = SERVER_FUNCTIONS.appendNewTodoStorage(formInput.value);
+	} else if (storageType === 'server') {
+		functionAnswer =  await (await(SERVER_FUNCTIONS.appendNewTodoServer(formInput.value))).json();
+	};
 
 	// Validation
 	if (functionAnswer) {
-		VISUAL_FUNCTIONS.drawTodo(formInput.value);
+		VISUAL_FUNCTIONS.drawTodo(functionAnswer);
 
 		formInput.classList.remove('error-input');
 		formInput.placeholder = '';
